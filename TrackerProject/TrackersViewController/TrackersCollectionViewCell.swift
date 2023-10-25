@@ -12,7 +12,7 @@ protocol TrackersCollectionViewCellDelegate: AnyObject {
     func trackerWasNotDone(id: UUID, indexPath: IndexPath)
 }
 
-class TrackerCollectionViewCell: UICollectionViewCell {
+final class TrackerCollectionViewCell: UICollectionViewCell {
     
     private var trackerIdentifier: UUID?
     private var indexPath: IndexPath?
@@ -137,7 +137,7 @@ class TrackerCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    @objc func didTapMarkButton() {
+    @objc private func didTapMarkButton() {
         guard let trackerIdentifier = trackerIdentifier, let indexPath = indexPath else { return }
         if wasDone {
             delegate?.trackerWasNotDone(id: trackerIdentifier, indexPath: indexPath)

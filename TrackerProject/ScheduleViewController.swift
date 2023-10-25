@@ -14,11 +14,8 @@ protocol ScheduleViewControllerDelegate: AnyObject {
 final class ScheduleViewController: UIViewController {
     
     weak var delegate: ScheduleViewControllerDelegate?
-    var createHabbitViewController = CreateHabbitViewController()
     
-    let tracker = TrackersViewController()
-    
-    private let weekDays = ["Понедельник", "Вторник", "Cреда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
+    private let weekDays: [String] = WeekDay.allCases.map { $0.rawValue }
     
     var choosenWeekDays: [WeekDay] = []
     
@@ -83,13 +80,13 @@ final class ScheduleViewController: UIViewController {
         let switcher = UISwitch(frame: .zero)
         let weekDay = WeekDay.allCases[indexPath.row]
         switcher.setOn(choosenWeekDays.contains(weekDay), animated: false)
-        switcher.tintColor = .blue
+        switcher.onTintColor = UIColor(named: "Blue")
         switcher.tag = indexPath.row
         switcher.addTarget(self, action: #selector(switcherChanged), for: .valueChanged)
         return switcher
     }
     
-    @objc func didTapCompleteButton() {
+    @objc private func didTapCompleteButton() {
         delegate?.updateSchedule(schedule: choosenWeekDays)
         navigationController?.popViewController(animated: true)
     }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		69AF80752AE892DD005A2928 /* TrackerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AF80742AE892DD005A2928 /* TrackerType.swift */; };
 		69F8D2A82AE750C0001FE388 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F8D2A72AE750C0001FE388 /* AppDelegate.swift */; };
 		69F8D2AA2AE750C0001FE388 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F8D2A92AE750C0001FE388 /* SceneDelegate.swift */; };
 		69F8D2AC2AE750C0001FE388 /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F8D2AB2AE750C0001FE388 /* TrackersViewController.swift */; };
@@ -16,8 +17,8 @@
 		69F8D2BF2AE7536B001FE388 /* StatisticController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F8D2BE2AE7536B001FE388 /* StatisticController.swift */; };
 		69F8D2C12AE753B0001FE388 /* TrackersCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F8D2C02AE753B0001FE388 /* TrackersCollectionViewCell.swift */; };
 		69F8D2C32AE753E7001FE388 /* TrackersSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F8D2C22AE753E7001FE388 /* TrackersSupplementaryView.swift */; };
-		69F8D2C62AE75450001FE388 /* CreateTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F8D2C52AE75450001FE388 /* CreateTrackerViewController.swift */; };
-		69F8D2C82AE75473001FE388 /* CreateHabbitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F8D2C72AE75473001FE388 /* CreateHabbitViewController.swift */; };
+		69F8D2C62AE75450001FE388 /* ChooseTrackerTypeViewControllerr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F8D2C52AE75450001FE388 /* ChooseTrackerTypeViewControllerr.swift */; };
+		69F8D2C82AE75473001FE388 /* CreateTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F8D2C72AE75473001FE388 /* CreateTrackerViewController.swift */; };
 		69F8D2CA2AE754A6001FE388 /* ColorsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F8D2C92AE754A6001FE388 /* ColorsCollectionViewCell.swift */; };
 		69F8D2CC2AE754B9001FE388 /* EmojiCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F8D2CB2AE754B9001FE388 /* EmojiCollectionViewCell.swift */; };
 		69F8D2CE2AE754E9001FE388 /* CreateTrackerSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F8D2CD2AE754E9001FE388 /* CreateTrackerSupplementaryView.swift */; };
@@ -30,6 +31,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		69AF80742AE892DD005A2928 /* TrackerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerType.swift; sourceTree = "<group>"; };
 		69F8D2A42AE750C0001FE388 /* TrackerProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrackerProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69F8D2A72AE750C0001FE388 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		69F8D2A92AE750C0001FE388 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -41,8 +43,8 @@
 		69F8D2BE2AE7536B001FE388 /* StatisticController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticController.swift; sourceTree = "<group>"; };
 		69F8D2C02AE753B0001FE388 /* TrackersCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersCollectionViewCell.swift; sourceTree = "<group>"; };
 		69F8D2C22AE753E7001FE388 /* TrackersSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersSupplementaryView.swift; sourceTree = "<group>"; };
-		69F8D2C52AE75450001FE388 /* CreateTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTrackerViewController.swift; sourceTree = "<group>"; };
-		69F8D2C72AE75473001FE388 /* CreateHabbitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateHabbitViewController.swift; sourceTree = "<group>"; };
+		69F8D2C52AE75450001FE388 /* ChooseTrackerTypeViewControllerr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseTrackerTypeViewControllerr.swift; sourceTree = "<group>"; };
+		69F8D2C72AE75473001FE388 /* CreateTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTrackerViewController.swift; sourceTree = "<group>"; };
 		69F8D2C92AE754A6001FE388 /* ColorsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsCollectionViewCell.swift; sourceTree = "<group>"; };
 		69F8D2CB2AE754B9001FE388 /* EmojiCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCollectionViewCell.swift; sourceTree = "<group>"; };
 		69F8D2CD2AE754E9001FE388 /* CreateTrackerSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTrackerSupplementaryView.swift; sourceTree = "<group>"; };
@@ -113,8 +115,8 @@
 		69F8D2C42AE75423001FE388 /* CreateHabbitViewController */ = {
 			isa = PBXGroup;
 			children = (
-				69F8D2C52AE75450001FE388 /* CreateTrackerViewController.swift */,
-				69F8D2C72AE75473001FE388 /* CreateHabbitViewController.swift */,
+				69F8D2C52AE75450001FE388 /* ChooseTrackerTypeViewControllerr.swift */,
+				69F8D2C72AE75473001FE388 /* CreateTrackerViewController.swift */,
 				69F8D2C92AE754A6001FE388 /* ColorsCollectionViewCell.swift */,
 				69F8D2CB2AE754B9001FE388 /* EmojiCollectionViewCell.swift */,
 				69F8D2CD2AE754E9001FE388 /* CreateTrackerSupplementaryView.swift */,
@@ -129,6 +131,7 @@
 				69F8D2D62AE755E4001FE388 /* TrackerCategory.swift */,
 				69F8D2D82AE755FB001FE388 /* TrackerRecord.swift */,
 				69F8D2DA2AE75611001FE388 /* Schedule.swift */,
+				69AF80742AE892DD005A2928 /* TrackerType.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -204,18 +207,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				69F8D2C12AE753B0001FE388 /* TrackersCollectionViewCell.swift in Sources */,
-				69F8D2C62AE75450001FE388 /* CreateTrackerViewController.swift in Sources */,
+				69F8D2C62AE75450001FE388 /* ChooseTrackerTypeViewControllerr.swift in Sources */,
 				69F8D2AC2AE750C0001FE388 /* TrackersViewController.swift in Sources */,
 				69F8D2D02AE75547001FE388 /* CreateCategoryViewController.swift in Sources */,
 				69F8D2CE2AE754E9001FE388 /* CreateTrackerSupplementaryView.swift in Sources */,
 				69F8D2D22AE7556E001FE388 /* ScheduleViewController.swift in Sources */,
 				69F8D2BD2AE75345001FE388 /* TabBarController.swift in Sources */,
-				69F8D2C82AE75473001FE388 /* CreateHabbitViewController.swift in Sources */,
+				69F8D2C82AE75473001FE388 /* CreateTrackerViewController.swift in Sources */,
 				69F8D2CC2AE754B9001FE388 /* EmojiCollectionViewCell.swift in Sources */,
 				69F8D2BF2AE7536B001FE388 /* StatisticController.swift in Sources */,
 				69F8D2D72AE755E4001FE388 /* TrackerCategory.swift in Sources */,
 				69F8D2D92AE755FB001FE388 /* TrackerRecord.swift in Sources */,
 				69F8D2DB2AE75611001FE388 /* Schedule.swift in Sources */,
+				69AF80752AE892DD005A2928 /* TrackerType.swift in Sources */,
 				69F8D2CA2AE754A6001FE388 /* ColorsCollectionViewCell.swift in Sources */,
 				69F8D2A82AE750C0001FE388 /* AppDelegate.swift in Sources */,
 				69F8D2D52AE755C6001FE388 /* Tracker.swift in Sources */,
@@ -371,6 +375,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -398,6 +403,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

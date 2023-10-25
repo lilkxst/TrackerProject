@@ -9,13 +9,13 @@ import UIKit
 
 final class TrackersViewController: UIViewController, UITextFieldDelegate {
     
-    weak var delegate: CreateHabbitViewControllerDelegate?
+    weak var delegate: CreateTrackerViewControllerDelegate?
     
     var categories: [TrackerCategory] = []
-    var visibleCategories: [TrackerCategory] = []
-    var completedTrackers: [TrackerRecord] = []
+    private var visibleCategories: [TrackerCategory] = []
+    private var completedTrackers: [TrackerRecord] = []
     
-    var currentDate: Date {
+    private var currentDate: Date {
         let currentDate = datePicker.date
         return currentDate
     }
@@ -96,8 +96,6 @@ final class TrackersViewController: UIViewController, UITextFieldDelegate {
     // MARK: - ViewsSetup
     
     private func setupViews() {
-        view.addSubview(datePicker)
-        view.addSubview(addNewTrackerButton)
         view.addSubview(titleLabel)
         view.addSubview(searchTextField)
         view.addSubview(trackersCollection)
@@ -110,14 +108,6 @@ final class TrackersViewController: UIViewController, UITextFieldDelegate {
         trackersCollection.register(TrackersSupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "TrackersCollectionSupplementaryView")
         
         NSLayoutConstraint.activate([
-            datePicker.widthAnchor.constraint(equalToConstant: 77),
-            datePicker.heightAnchor.constraint(equalToConstant: 34),
-            datePicker.topAnchor.constraint(equalTo: view.topAnchor, constant: 49),
-            datePicker.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            addNewTrackerButton.widthAnchor.constraint(equalToConstant: 42),
-            addNewTrackerButton.heightAnchor.constraint(equalToConstant: 42),
-            addNewTrackerButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 45),
-            addNewTrackerButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 6),
             titleLabel.widthAnchor.constraint(equalToConstant: 254),
             titleLabel.heightAnchor.constraint(equalToConstant: 41),
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 88),
@@ -133,15 +123,11 @@ final class TrackersViewController: UIViewController, UITextFieldDelegate {
             trackersCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             placeholderImage.widthAnchor.constraint(equalToConstant: 80),
             placeholderImage.heightAnchor.constraint(equalToConstant: 80),
-            placeholderImage.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 230),
-            placeholderImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 147),
-            placeholderImage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -148),
+            placeholderImage.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            placeholderImage.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
             placeholderLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             placeholderLabel.topAnchor.constraint(equalTo: placeholderImage.bottomAnchor, constant: 8),
-            placeholderLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -304)
         ])
-        datePicker.translatesAutoresizingMaskIntoConstraints = false
-        addNewTrackerButton.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         searchTextField.translatesAutoresizingMaskIntoConstraints = false
         trackersCollection.translatesAutoresizingMaskIntoConstraints = false
@@ -154,14 +140,11 @@ final class TrackersViewController: UIViewController, UITextFieldDelegate {
     
 // MARK: - PrivateFunctions
     
-    private func showPlaceholder() {
-        placeholderImage.isHidden = false
-        placeholderLabel.isHidden = false
-    }
-    
-    private func hidePlaceHolder() {
-        placeholderImage.isHidden = true
-        placeholderLabel.isHidden = true
+    private func showPlaceholder(text: String, image: UIImage, isHidden: Bool) {
+        placeholderImage.image = image
+        placeholderLabel.text = text
+        placeholderImage.isHidden = isHidden
+        placeholderLabel.isHidden = isHidden
     }
     
     private func trackerIsRecorded(trackerRecord: TrackerRecord, id: UUID) -> Bool {
@@ -194,17 +177,20 @@ final class TrackersViewController: UIViewController, UITextFieldDelegate {
            }
            return TrackerCategory(title: category.title, trackersList: trackers)
        }
-       if visibleCategories.isEmpty {
-           showPlaceholder()
-       } else {
-           hidePlaceHolder()
-       }
-       trackersCollection.reloadData()
-       dismiss(animated: true)
+        if categories.isEmpty {
+            showPlaceholder(text: "Что будем отслеживать?", image: UIImage(named: "TrackersViewImage") ?? UIImage(), isHidden: false)
+        } else
+        if visibleCategories.isEmpty {
+            showPlaceholder(text: "Ничего не найдено", image: UIImage(named: "NotFoundTrackerPlaceholder") ?? UIImage(), isHidden: false)
+        } else {
+            showPlaceholder(text: "", image: UIImage(), isHidden: true)
+        }
+        trackersCollection.reloadData()
+        dismiss(animated: true)
     }
 
     @objc private func tapAddNewTrackerButton() {
-        let createController = CreateTrackerViewController()
+        let createController = ChooseTrackerTypeViewController()
         createController.delegate = self
         let navigationController = UINavigationController(rootViewController: createController)
         present(navigationController, animated: true)
@@ -290,7 +276,7 @@ extension TrackersViewController: UISearchTextFieldDelegate {
 
 // MARK: - CreateHabbitViewControllerDelegate
 
-extension TrackersViewController: CreateHabbitViewControllerDelegate {
+extension TrackersViewController: CreateTrackerViewControllerDelegate {
     
     func reloadTrackersData(newCategory: TrackerCategory, newTracker: Tracker) {
         if let index = categories.firstIndex(where: { $0.title == newCategory.title }) {
@@ -311,7 +297,7 @@ extension TrackersViewController: CreateHabbitViewControllerDelegate {
 
 extension TrackersViewController: TrackersCollectionViewCellDelegate {
     func trackerWasDone(id: UUID, indexPath: IndexPath) {
-        if datePicker.date > Date() {
+        if datePicker.date > currentDate {
             return
         }
         let trackerRecord = TrackerRecord(trackerRecordIdentifier: id, dateRecord: datePicker.date)

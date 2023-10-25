@@ -16,9 +16,7 @@ final class CreateCategoryViewController: UIViewController {
     weak var delegate: CreateCategoryViewControllerDelegate?
     var category: TrackerCategory?
     
-    let mockDataCategory = TrackerCategory(title: "MockDataCategory", trackersList: [])
-    
-    var createHabbitViewController = CreateHabbitViewController()
+    private let mockDataCategory = TrackerCategory(title: "MockDataCategory", trackersList: [])
     
     private lazy var placeholderImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "TrackersViewImage"))

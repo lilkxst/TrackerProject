@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ColorsCollectionViewCell: UICollectionViewCell {
+final class ColorsCollectionViewCell: UICollectionViewCell {
     
     let view: UIView = UIView()
     

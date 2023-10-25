@@ -14,7 +14,7 @@ final class TrackersSupplementaryView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        headerLabel.font = UIFont.systemFont(ofSize: 19)
+        headerLabel.font = UIFont.systemFont(ofSize: 19, weight: .bold)
         headerLabel.textColor = UIColor(named: "Black")
         addSubview(headerLabel)
         
