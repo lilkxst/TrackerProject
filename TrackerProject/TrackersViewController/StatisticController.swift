@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  StatisticController.swift
 //  TrackerProject
 //
 //  Created by Артём Костянко on 24.10.23.
@@ -7,13 +7,10 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-
+final class StatisticViewController: UIViewController {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
     }
-
-
 }
-
