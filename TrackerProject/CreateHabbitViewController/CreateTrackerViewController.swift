@@ -307,8 +307,8 @@ extension CreateTrackerViewController: UICollectionViewDataSource {
             return cell
         } else if indexPath.section == 1 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorsCollectionViewCell", for: indexPath) as! ColorsCollectionViewCell
-            cell.view.backgroundColor = colors[indexPath.row]
-            cell.view.layer.cornerRadius = 8
+            cell.fieldView.backgroundColor = colors[indexPath.row]
+            cell.isSelected(isSelect: false)
             return cell
         } else {
             let cell = UICollectionViewCell()
@@ -355,23 +355,23 @@ extension CreateTrackerViewController: UICollectionViewDelegateFlowLayout {
         if indexPath.section == 0 {
             if let selectedEmoji = indexOfSelectedEmoji {
                 let cell = collectionView.cellForItem(at: selectedEmoji) as? EmojiCollectionViewCell
-                cell?.isSelected = false
+                cell?.isSelected(isSelect: false)
             }
             indexOfSelectedEmoji = indexPath
         } else {
             if let selectedColor = indexOfSelectedColor {
                 let cell = collectionView.cellForItem(at: selectedColor) as? ColorsCollectionViewCell
-                cell?.isSelected = false
+                cell?.isSelected(isSelect: false)
             }
             indexOfSelectedColor = indexPath
         }
         if indexPath.section == 0 {
             let cell = collectionView.cellForItem(at: indexPath) as? EmojiCollectionViewCell
-            cell?.isSelected = true
+            cell?.isSelected(isSelect: true)
             activateCreateButton()
         } else {
             let cell = collectionView.cellForItem(at: indexPath) as? ColorsCollectionViewCell
-            cell?.isSelected = true
+            cell?.isSelected(isSelect: true)
             activateCreateButton()
         }
     }
