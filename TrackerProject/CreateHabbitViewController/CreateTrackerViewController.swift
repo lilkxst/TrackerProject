@@ -280,6 +280,7 @@ extension CreateTrackerViewController: UITableViewDelegate {
         } else {
             let controllerToPresent = ScheduleViewController()
             controllerToPresent.delegate = self
+            controllerToPresent.choosenWeekDays = choosenSchedule
             navigationController?.pushViewController(controllerToPresent, animated: true)
         }
     }
