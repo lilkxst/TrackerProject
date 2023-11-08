@@ -79,7 +79,7 @@ final class ScheduleViewController: UIViewController {
     private func switcher(for indexPath: IndexPath) -> UISwitch {
         let switcher = UISwitch(frame: .zero)
         let weekDay = WeekDay.allCases[indexPath.row]
-        switcher.setOn(choosenWeekDays.contains(weekDay), animated: false)
+        switcher.setOn(choosenWeekDays.contains(weekDay), animated: true)
         switcher.onTintColor = UIColor(named: "Blue")
         switcher.tag = indexPath.row
         switcher.addTarget(self, action: #selector(switcherChanged), for: .valueChanged)

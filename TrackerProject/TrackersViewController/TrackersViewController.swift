@@ -14,6 +14,8 @@ final class TrackersViewController: UIViewController, UITextFieldDelegate {
     var categories: [TrackerCategory] = []
     private var visibleCategories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
+    private var trackerCategoryStore = TrackerCategoryStore()
+    private var trackerRecordStore = TrackerRecordStore()
     
     private var currentDate: Date {
         let currentDate = datePicker.date
@@ -89,13 +91,21 @@ final class TrackersViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
         setupViews()
+        
+        trackerCategoryStore.delegate = self
+        categories = trackerCategoryStore.trackerCategories
+        trackerRecordStore.delegate = self
+        completedTrackers = trackerRecordStore.completedTrackers
+        
+        visibleCategories = categories
+        updateVisibleCategories()
     }
     
     // MARK: - ViewsSetup
     
     private func setupViews() {
+        view.backgroundColor = .white
         view.addSubview(titleLabel)
         view.addSubview(searchTextField)
         view.addSubview(trackersCollection)
@@ -147,13 +157,9 @@ final class TrackersViewController: UIViewController, UITextFieldDelegate {
         placeholderLabel.isHidden = isHidden
     }
     
-    private func trackerIsRecorded(trackerRecord: TrackerRecord, id: UUID) -> Bool {
-        return trackerRecord.trackerRecordIdentifier == id && Calendar.current.isDate(trackerRecord.dateRecord, inSameDayAs: datePicker.date)
-    }
-    
-    private func trackerIsRecordedToday(id: UUID) -> Bool {
+    private func trackerIsRecorded(id: UUID) -> Bool {
         completedTrackers.contains { trackerRecord in
-            trackerIsRecorded(trackerRecord: trackerRecord, id: id)
+            trackerRecord.trackerRecordIdentifier == id && Calendar.current.isDate(trackerRecord.dateRecord, inSameDayAs: datePicker.date)
         }
     }
 
@@ -218,7 +224,7 @@ extension TrackersViewController: UICollectionViewDataSource {
         let completedDays = completedTrackers.filter {
             $0.trackerRecordIdentifier == tracker.trackerIdentifier
         }.count
-        let trackerIsDone = trackerIsRecordedToday(id: tracker.trackerIdentifier)
+        let trackerIsDone = trackerIsRecorded(id: tracker.trackerIdentifier)
         cell.prepareForReuse()
         cell.updateCell(tracker: tracker, trackerWasDone: trackerIsDone, days: completedDays, indexPath: indexPath)
         return cell
@@ -274,21 +280,12 @@ extension TrackersViewController: UISearchTextFieldDelegate {
     }
 }
 
-// MARK: - CreateHabbitViewControllerDelegate
+// MARK: - CreateTrackerViewControllerDelegate
 
 extension TrackersViewController: CreateTrackerViewControllerDelegate {
     
     func reloadTrackersData(newCategory: TrackerCategory, newTracker: Tracker) {
-        if let index = categories.firstIndex(where: { $0.title == newCategory.title }) {
-            var updateTrackers = categories[index].trackersList
-            updateTrackers.append(newTracker)
-            
-            let updateCategory = TrackerCategory(title: newCategory.title, trackersList: updateTrackers)
-            categories[index] = updateCategory
-        } else {
-            let newCategory = TrackerCategory(title: newCategory.title, trackersList: [newTracker])
-            categories.append(newCategory)
-        }
+        try? trackerCategoryStore.saveTrackerCategory(newCategory: newCategory)
         updateVisibleCategories()
     }
 }
@@ -301,15 +298,30 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
             return
         }
         let trackerRecord = TrackerRecord(trackerRecordIdentifier: id, dateRecord: datePicker.date)
-        completedTrackers.append(trackerRecord)
+        try? trackerRecordStore.addTrackerRecord(trackerRecord: trackerRecord)
         trackersCollection.reloadItems(at: [indexPath])
     }
     
     func trackerWasNotDone(id: UUID, indexPath: IndexPath) {
-        completedTrackers.removeAll { trackerRecord in
-            trackerIsRecorded(trackerRecord: trackerRecord, id: id)
-        }
+        let trackerRecord = TrackerRecord(trackerRecordIdentifier: id, dateRecord: datePicker.date)
+        try? trackerRecordStore.removeTrackerRecord(trackerRecord: trackerRecord)
         trackersCollection.reloadItems(at: [indexPath])
+    }
+}
+
+// MARK: - TrackerCategoryStoreDelegate
+
+extension TrackersViewController: TrackerCategoryStoreDelegate {
+    func updateCategories() {
+        categories = trackerCategoryStore.trackerCategories
+    }
+}
+
+// MARK: = TrackerRecordStoreDelegate
+
+extension TrackersViewController: TrackerRecordStoreDelegate {
+    func updateTrackerRecords() {
+        completedTrackers = trackerRecordStore.completedTrackers
     }
 }
 
