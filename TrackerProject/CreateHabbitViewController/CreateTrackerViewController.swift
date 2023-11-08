@@ -304,11 +304,11 @@ extension CreateTrackerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EmojiCollectionViewCell", for: indexPath) as! EmojiCollectionViewCell
-            cell.titleLabel.text = emoji[indexPath.row]
+            cell.launchCellEmoji(indexPath: indexPath)
             return cell
         } else if indexPath.section == 1 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorsCollectionViewCell", for: indexPath) as! ColorsCollectionViewCell
-            cell.fieldView.backgroundColor = colors[indexPath.row]
+            cell.launchFieldColor(indexPath: indexPath)
             cell.isSelected(isSelect: false)
             return cell
         } else {

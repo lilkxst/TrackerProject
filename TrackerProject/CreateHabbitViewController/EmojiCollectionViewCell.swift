@@ -9,13 +9,18 @@ import UIKit
 
 final class EmojiCollectionViewCell: UICollectionViewCell {
     
-    var field: UIView = {
+    private let emoji = ["🙂", "😻", "🌺", "🐶", "❤️", "😱",
+                         "😇", "😡", "🥶", "🤔", "🙌", "🍔",
+                         "🥦", "🏓", "🥇", "🎸", "🏝", "😪"
+    ]
+    
+    private var field: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 8
         return view
     }()
     
-    var titleLabel: UILabel = {
+    private var titleLabel: UILabel = {
        let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         return label
@@ -42,10 +47,11 @@ final class EmojiCollectionViewCell: UICollectionViewCell {
     }
     
     func isSelected(isSelect: Bool) {
-        if isSelect == true {
-            field.backgroundColor = UIColor(named: "LightGray")
-        } else {
-            field.backgroundColor = .clear
-        }
+        let color = isSelect ? UIColor(named: "LightGray") : .clear
+                field.backgroundColor = color
+    }
+    
+    func launchCellEmoji(indexPath: IndexPath) {
+        titleLabel.text = emoji[indexPath.row]
     }
 }

@@ -9,7 +9,9 @@ import UIKit
 
 final class ColorsCollectionViewCell: UICollectionViewCell {
     
-    var cornerView: UIView = {
+    private let colors: [UIColor] = (1...18).map { UIColor(named: "Color\($0)") ?? UIColor.clear }
+    
+    private var cornerView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 8
         view.layer.borderWidth = 3
@@ -17,7 +19,7 @@ final class ColorsCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    var fieldView: UIView = {
+    private var fieldView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 8
         return view
@@ -48,11 +50,12 @@ final class ColorsCollectionViewCell: UICollectionViewCell {
     }
     
     func isSelected(isSelect: Bool) {
-        if isSelect == true {
-            cornerView.layer.borderColor = fieldView.backgroundColor?.withAlphaComponent(0.3).cgColor
-        } else {
-            cornerView.layer.borderColor = fieldView.backgroundColor?.withAlphaComponent(0).cgColor
-        }
+        let selectedAlpha: CGFloat = isSelect ? 0.3 : .zero
+        cornerView.layer.borderColor = fieldView.backgroundColor?.withAlphaComponent(selectedAlpha).cgColor
+    }
+    
+    func launchFieldColor(indexPath: IndexPath) {
+        fieldView.backgroundColor = colors[indexPath.row]
     }
 }
 

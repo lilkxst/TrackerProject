@@ -151,8 +151,8 @@
 			children = (
 				69F8D2C52AE75450001FE388 /* ChooseTrackerTypeViewControllerr.swift */,
 				69F8D2C72AE75473001FE388 /* CreateTrackerViewController.swift */,
-				69F8D2C92AE754A6001FE388 /* ColorsCollectionViewCell.swift */,
 				69F8D2CB2AE754B9001FE388 /* EmojiCollectionViewCell.swift */,
+				69F8D2C92AE754A6001FE388 /* ColorsCollectionViewCell.swift */,
 				69F8D2CD2AE754E9001FE388 /* CreateTrackerSupplementaryView.swift */,
 			);
 			path = CreateHabbitViewController;
