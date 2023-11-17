@@ -22,7 +22,7 @@ final class CreateTrackerViewController: UIViewController {
     ]
     private let colors: [UIColor] = (1...18).map { UIColor(named: "Color\($0)") ?? UIColor.clear }
     private var habbitName: String?
-    private var category: TrackerCategory?
+    private var categoryTitle: String?
     private var indexOfSelectedColor: IndexPath?
     private var indexOfSelectedEmoji: IndexPath?
     private var choosenSchedule: [WeekDay] = []
@@ -175,6 +175,8 @@ final class CreateTrackerViewController: UIViewController {
         createButton.translatesAutoresizingMaskIntoConstraints = false
     }
     
+// MARK: - PrivateFunctions
+    
     private func updateButtonsTableView() {
         switch trackerType {
         case .habbit:
@@ -187,7 +189,7 @@ final class CreateTrackerViewController: UIViewController {
     }
     
     private func activateCreateButton() {
-        if textField.text != nil, category != nil, trackerType == .irregularEvent || trackerType == .habbit && !choosenSchedule.isEmpty, indexOfSelectedColor != nil, indexOfSelectedEmoji != nil {
+        if textField.text != nil, categoryTitle != nil, trackerType == .irregularEvent || trackerType == .habbit && !choosenSchedule.isEmpty, indexOfSelectedColor != nil, indexOfSelectedEmoji != nil {
             createButton.isEnabled = true
             createButton.backgroundColor = UIColor(named: "Black")
         } else {
@@ -210,7 +212,7 @@ final class CreateTrackerViewController: UIViewController {
                                                  
     @objc private func createNewTracker() {
         let newTracker = Tracker(trackerIdentifier: UUID(), name: textField.text ?? "", color: colors[indexOfSelectedColor?.row ?? 0], emoji: emoji[indexOfSelectedEmoji?.row ?? 0], schedule: choosenSchedule)
-        let newCategory = TrackerCategory(title: category?.title ?? "", trackersList: [newTracker])
+        let newCategory = TrackerCategory(title: categoryTitle ?? "", trackersList: [newTracker])
         delegate?.reloadTrackersData(newCategory: newCategory, newTracker: newTracker)
         self.dismiss(animated: true, completion: nil)
         }
@@ -242,7 +244,7 @@ extension CreateTrackerViewController: UITableViewDataSource {
         
         if indexPath.row == 0 {
             textLabel = "Категории"
-            if let categoryName = category?.title {
+            if let categoryName = categoryTitle {
                 textLabel += "\n" + categoryName }
             } else {
                 textLabel = "Расписание"
@@ -274,8 +276,9 @@ extension CreateTrackerViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
-            let controllerToPresent = CreateCategoryViewController()
-            controllerToPresent.delegate = self
+            let controllerToPresent = CategoryViewController()
+            controllerToPresent.categoryViewModel.delegate = self
+            controllerToPresent.categoryViewModel.selectCategory(category: categoryTitle)
             navigationController?.pushViewController(controllerToPresent, animated: true)
         } else {
             let controllerToPresent = ScheduleViewController()
@@ -320,9 +323,9 @@ extension CreateTrackerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! CreateTrackerSupplementaryView
         if indexPath.section == 0 {
-            view.titleLabel.text = "Emoji"
+            view.launchEmojiTitle()
         } else {
-            view.titleLabel.text = "Цвет"
+            view.launchColorTitle()
         }
         return view
     }
@@ -380,9 +383,9 @@ extension CreateTrackerViewController: UICollectionViewDelegateFlowLayout {
 
 // MARK: - CreateCategoryViewControllerDelegate
 
-extension CreateTrackerViewController: CreateCategoryViewControllerDelegate {
-    func updateNewCategory(newCategory: TrackerCategory?) {
-        self.category = newCategory
+extension CreateTrackerViewController: CategoryViewModelDelegate {
+    func updateCategory(newCategoryTitle: String?) {
+        categoryTitle = newCategoryTitle
         activateCreateButton()
         buttonsTableView.reloadData()
     }

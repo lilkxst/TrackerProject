@@ -16,7 +16,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         self.window = UIWindow(windowScene: windowScene)
         self.window?.makeKeyAndVisible()
-        self.window?.rootViewController = TabBarController()
+        if UserDefaults.standard.bool(forKey: "notFirstStart") {
+            self.window?.rootViewController = TabBarController()
+        } else {
+            UserDefaults.standard.set(true, forKey: "notFirstStart")
+            self.window?.rootViewController = OnboardingViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
