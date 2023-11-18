@@ -21,7 +21,7 @@ final class CreateCategoryViewController: UIViewController {
         textField.placeholder = "Введите название категори"
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
         textField.leftViewMode = .always
-        textField.backgroundColor = UIColor(named: "GrayHex")
+        textField.backgroundColor = .ypGrayHex
         textField.layer.cornerRadius = 16
         textField.layer.borderWidth = 1.0
         textField.layer.borderColor = UIColor(named: "GrayHex")?.cgColor
@@ -33,7 +33,7 @@ final class CreateCategoryViewController: UIViewController {
     private lazy var readyButton: UIButton = {
         let button = UIButton()
         button.setTitle("Готово", for: .normal)
-        button.backgroundColor = UIColor(named: "Gray")
+        button.backgroundColor = .ypGray
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 16
         button.isEnabled = false
@@ -81,10 +81,10 @@ final class CreateCategoryViewController: UIViewController {
     private func activateReadyButton() {
         if categoryTitle != nil {
             readyButton.isEnabled = true
-            readyButton.backgroundColor = UIColor(named: "Black")
+            readyButton.backgroundColor = .ypBlack
         } else {
             readyButton.isEnabled = false
-            readyButton.backgroundColor = UIColor(named: "Gray")
+            readyButton.backgroundColor = .ypGray
         }
     }
     

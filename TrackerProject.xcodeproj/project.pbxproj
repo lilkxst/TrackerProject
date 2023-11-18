@@ -16,6 +16,8 @@
 		69885E512AEFFEDD009F3C3B /* UIColorMarshalling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69885E502AEFFEDD009F3C3B /* UIColorMarshalling.swift */; };
 		69885E532AEFFF8E009F3C3B /* UIScheduleMarshalling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69885E522AEFFF8E009F3C3B /* UIScheduleMarshalling.swift */; };
 		69AF80752AE892DD005A2928 /* TrackerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AF80742AE892DD005A2928 /* TrackerType.swift */; };
+		69D467762B08D3CF00B1C60A /* TrackerCategoryViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D467752B08D3CF00B1C60A /* TrackerCategoryViewCell.swift */; };
+		69D467782B08DE1100B1C60A /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D467772B08DE1100B1C60A /* Colors.swift */; };
 		69DE05472B019D0D001E39B7 /* CategoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DE05462B019D0C001E39B7 /* CategoryModel.swift */; };
 		69DE05492B019D1B001E39B7 /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DE05482B019D1B001E39B7 /* CategoryViewModel.swift */; };
 		69DE054B2B019D3E001E39B7 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DE054A2B019D3E001E39B7 /* Observable.swift */; };
@@ -52,6 +54,8 @@
 		69885E502AEFFEDD009F3C3B /* UIColorMarshalling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorMarshalling.swift; sourceTree = "<group>"; };
 		69885E522AEFFF8E009F3C3B /* UIScheduleMarshalling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScheduleMarshalling.swift; sourceTree = "<group>"; };
 		69AF80742AE892DD005A2928 /* TrackerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerType.swift; sourceTree = "<group>"; };
+		69D467752B08D3CF00B1C60A /* TrackerCategoryViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryViewCell.swift; sourceTree = "<group>"; };
+		69D467772B08DE1100B1C60A /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		69DE05462B019D0C001E39B7 /* CategoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryModel.swift; sourceTree = "<group>"; };
 		69DE05482B019D1B001E39B7 /* CategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
 		69DE054A2B019D3E001E39B7 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
@@ -129,6 +133,7 @@
 				69DE05482B019D1B001E39B7 /* CategoryViewModel.swift */,
 				69DE054A2B019D3E001E39B7 /* Observable.swift */,
 				69DE05502B019E0C001E39B7 /* CreateCategoryViewController.swift */,
+				69D467752B08D3CF00B1C60A /* TrackerCategoryViewCell.swift */,
 			);
 			path = CreateCategoryViewController;
 			sourceTree = "<group>";
@@ -164,6 +169,7 @@
 				69F8D2B02AE750C2001FE388 /* Assets.xcassets */,
 				69F8D2B22AE750C2001FE388 /* LaunchScreen.storyboard */,
 				69F8D2B52AE750C2001FE388 /* Info.plist */,
+				69D467772B08DE1100B1C60A /* Colors.swift */,
 			);
 			path = TrackerProject;
 			sourceTree = "<group>";
@@ -275,6 +281,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				69F8D2C12AE753B0001FE388 /* TrackersCollectionViewCell.swift in Sources */,
+				69D467782B08DE1100B1C60A /* Colors.swift in Sources */,
 				69F8D2C62AE75450001FE388 /* ChooseTrackerTypeViewControllerr.swift in Sources */,
 				69F8D2AC2AE750C0001FE388 /* TrackersViewController.swift in Sources */,
 				69885E4F2AEF1C0E009F3C3B /* TrackerRecordStore.swift in Sources */,
@@ -304,6 +311,7 @@
 				69DE054B2B019D3E001E39B7 /* Observable.swift in Sources */,
 				69F8D2D52AE755C6001FE388 /* Tracker.swift in Sources */,
 				69F8D2AA2AE750C0001FE388 /* SceneDelegate.swift in Sources */,
+				69D467762B08D3CF00B1C60A /* TrackerCategoryViewCell.swift in Sources */,
 				69F8D2C32AE753E7001FE388 /* TrackersSupplementaryView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

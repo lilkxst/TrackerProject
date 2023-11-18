@@ -36,7 +36,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     private lazy var titleLabel: UILabel = {
         let title = UILabel()
-        title.textColor = UIColor(named: "White")
+        title.textColor = .ypWhite
         title.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         title.numberOfLines = 2
         title.lineBreakMode = .byWordWrapping
@@ -50,14 +50,14 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     private lazy var quantityLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor(named: "Black")
+        label.textColor = .ypBlack
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         return label
     }()
     
     private lazy var markButton: UIButton = {
         let button = UIButton.systemButton(with: UIImage(), target: self, action: #selector(didTapMarkButton))
-        button.backgroundColor = UIColor(named: "White")
+        button.backgroundColor = .ypWhite
         button.layer.cornerRadius = 17
         return button
     }()

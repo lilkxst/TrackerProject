@@ -39,7 +39,7 @@ final class TrackersViewController: UIViewController, UITextFieldDelegate {
     private lazy var addNewTrackerButton: UIBarButtonItem = {
         let addNewTrackerButton = UIBarButtonItem()
         addNewTrackerButton.image = UIImage(named: "AddNewTrackerButton")
-        addNewTrackerButton.tintColor = UIColor(named: "Black")
+        addNewTrackerButton.tintColor = .ypBlack
         addNewTrackerButton.action = #selector(tapAddNewTrackerButton)
         return addNewTrackerButton
     }()

@@ -47,7 +47,7 @@ final class CreateTrackerViewController: UIViewController {
         textField.placeholder = "Введите название трекера"
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
         textField.leftViewMode = .always
-        textField.backgroundColor = UIColor(named: "GrayHex")
+        textField.backgroundColor = .ypGrayHex
         textField.layer.cornerRadius = 16
         textField.layer.borderWidth = 1.0
         textField.layer.borderColor = UIColor(named: "GrayHex")?.cgColor
@@ -58,7 +58,7 @@ final class CreateTrackerViewController: UIViewController {
     
     private lazy var limitationLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor(named: "Red")
+        label.textColor = .ypRed
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         label.text = "Ограничение 38 символов"
         return label
@@ -109,7 +109,7 @@ final class CreateTrackerViewController: UIViewController {
     private lazy var createButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 16
-        button.backgroundColor = UIColor(named: "Gray")
+        button.backgroundColor = .ypGray
         button.setTitle("Создать", for: .normal)
         button.clipsToBounds = true
         button.addTarget(self, action: #selector(createNewTracker), for: .touchUpInside)
@@ -191,10 +191,10 @@ final class CreateTrackerViewController: UIViewController {
     private func activateCreateButton() {
         if textField.text != nil, categoryTitle != nil, trackerType == .irregularEvent || trackerType == .habbit && !choosenSchedule.isEmpty, indexOfSelectedColor != nil, indexOfSelectedEmoji != nil {
             createButton.isEnabled = true
-            createButton.backgroundColor = UIColor(named: "Black")
+            createButton.backgroundColor = .ypBlack
         } else {
             createButton.isEnabled = false
-            createButton.backgroundColor = UIColor(named: "Gray")
+            createButton.backgroundColor = .ypGray
         }
     }
     
@@ -235,7 +235,7 @@ extension CreateTrackerViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CreateHabbitTableViewCell", for: indexPath)
-        cell.backgroundColor = UIColor(named: "GrayHex")
+        cell.backgroundColor = .ypGrayHex
         cell.selectionStyle = .none
         cell.accessoryType = .disclosureIndicator
         var choosenAttribute = NSMutableAttributedString()

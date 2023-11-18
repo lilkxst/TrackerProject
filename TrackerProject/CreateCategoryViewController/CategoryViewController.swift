@@ -33,6 +33,7 @@ final class CategoryViewController: UIViewController {
         let tableView = UITableView()
         tableView.rowHeight = 75
         tableView.layer.cornerRadius = 16
+        tableView.isScrollEnabled = true
         tableView.dataSource = self
         tableView.delegate = self
         return tableView
@@ -42,7 +43,7 @@ final class CategoryViewController: UIViewController {
         let button = UIButton()
         button.addTarget(self, action: #selector(didTapAddCategoryButton), for: .touchUpInside)
         button.setTitle("Добавить категорию", for: .normal)
-        button.backgroundColor = .black
+        button.backgroundColor = .ypBlack
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 16
         return button
@@ -68,7 +69,7 @@ final class CategoryViewController: UIViewController {
     private func setupViews() {
         navigationItem.setHidesBackButton(true, animated: true)
         view.backgroundColor = .white
-        categoriesList.register(UITableViewCell.self, forCellReuseIdentifier: "CategoriesList")
+        categoriesList.register(TrackerCategoryViewCell.self, forCellReuseIdentifier: "CategoriesList")
         title = "Категория"
         view.addSubview(addCategoryButton)
         view.addSubview(categoriesList)
@@ -120,11 +121,28 @@ extension CategoryViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = categoriesList.dequeueReusableCell(withIdentifier: "CategoriesList", for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CategoriesList", for: indexPath) as? TrackerCategoryViewCell else { return UITableViewCell() }
+        
         cell.textLabel?.text = categoryViewModel.categories[indexPath.row].categoryName
-        cell.backgroundColor = UIColor(named: "GrayHex")
-        cell.layer.cornerRadius = 16
-        cell.separatorInset.right = 16
+        
+        let cellCount = tableView.numberOfRows(inSection: indexPath.section)
+        if cellCount == 1 {
+            cell.layer.maskedCorners = [.layerMaxXMaxYCorner,.layerMinXMaxYCorner,
+                                        .layerMinXMinYCorner,.layerMaxXMinYCorner]
+            cell.separatorInset.right = tableView.bounds.width
+        } else {
+            switch indexPath.row {
+            case 0:
+                cell.layer.maskedCorners = [.layerMinXMinYCorner,.layerMaxXMinYCorner]
+            case cellCount - 1:
+                cell.layer.maskedCorners = [.layerMaxXMaxYCorner,.layerMinXMaxYCorner]
+                cell.separatorInset.right = tableView.bounds.width
+            default:
+                cell.layer.cornerRadius = 0
+            }
+        }
+        
+        cell.accessoryType = categoryViewModel.selectedCategory?.categoryName == cell.textLabel?.text ? .checkmark : .none
         return cell
     }
 }

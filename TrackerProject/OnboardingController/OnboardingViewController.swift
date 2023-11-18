@@ -15,23 +15,11 @@ final class OnboardingViewController: UIPageViewController {
         return [firstPage, secondPage]
     }()
     
-    private lazy var closeOnboardingButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = UIColor(named: "Black")
-        button.setTitle("Вот это технологии!", for: .normal)
-        button.setTitleColor(UIColor(named: "White"), for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        button.layer.cornerRadius = 16
-        button.addTarget(self, action: #selector(didTapCloseOnboardingButton), for: .touchUpInside)
-        return button
-    }()
-    
     private lazy var pageControl: UIPageControl = {
         let pageControl = UIPageControl()
         pageControl.numberOfPages = pages.count
         pageControl.currentPage = 0
-        pageControl.currentPageIndicatorTintColor = UIColor(named: "Black")
-        pageControl.pageIndicatorTintColor = UIColor(named: "")
+        pageControl.currentPageIndicatorTintColor = .ypBlack
         return pageControl
     }()
     
@@ -49,26 +37,13 @@ final class OnboardingViewController: UIPageViewController {
     }
     
     private func setupViews() {
-        view.addSubview(closeOnboardingButton)
         view.addSubview(pageControl)
         
         NSLayoutConstraint.activate([
-            closeOnboardingButton.heightAnchor.constraint(equalToConstant: 60),
-            closeOnboardingButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            closeOnboardingButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            closeOnboardingButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
             pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -134),
             pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
-        closeOnboardingButton.translatesAutoresizingMaskIntoConstraints = false
         pageControl.translatesAutoresizingMaskIntoConstraints = false
-    }
-    
-    @objc private func didTapCloseOnboardingButton() {
-        guard let window = UIApplication.shared.windows.first else {
-            fatalError("Unable create window")
-        }
-        window.rootViewController = TabBarController()
     }
 }
 
@@ -77,11 +52,7 @@ extension OnboardingViewController: UIPageViewControllerDataSource {
         guard let viewControllerIndex = pages.firstIndex(of: viewController) else {
             return nil
         }
-        let previousIndex = viewControllerIndex - 1
-
-        guard previousIndex >= 0 else {
-            return pages.last
-        }
+        let previousIndex = (viewControllerIndex + pages.count - 1) % pages.count
         return pages[previousIndex]
     }
     
@@ -89,10 +60,7 @@ extension OnboardingViewController: UIPageViewControllerDataSource {
         guard let viewControllerIndex = pages.firstIndex(of: viewController) else {
             return nil
         }
-        let nextIndex = viewControllerIndex + 1
-        guard nextIndex < pages.count else {
-            return pages.first
-        }
+        let nextIndex = (viewControllerIndex + 1) % pages.count
         return pages[nextIndex]
     }
 }

@@ -15,7 +15,7 @@ final class ChooseTrackerTypeViewController: UIViewController {
         let button = UIButton()
         button.layer.cornerRadius = 16
         button.setTitle("Привычка", for: .normal)
-        button.backgroundColor = .black
+        button.backgroundColor = .ypBlack
         button.addTarget(self, action: #selector(tapCreateHabbitButton), for: .touchUpInside)
         return button
     }()
@@ -24,7 +24,7 @@ final class ChooseTrackerTypeViewController: UIViewController {
         let button = UIButton()
         button.layer.cornerRadius = 16
         button.setTitle("Нерегулярное событие", for: .normal)
-        button.backgroundColor = .black
+        button.backgroundColor = .ypBlack
         button.addTarget(self, action: #selector(tapCreateIrregularEventButton), for: .touchUpInside)
         return button
     }()
@@ -32,7 +32,7 @@ final class ChooseTrackerTypeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
+        view.backgroundColor = .ypWhite
         setupUI()
     }
     
