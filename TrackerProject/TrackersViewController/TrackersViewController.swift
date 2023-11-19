@@ -11,7 +11,7 @@ final class TrackersViewController: UIViewController, UITextFieldDelegate {
     
     weak var delegate: CreateTrackerViewControllerDelegate?
     
-    var categories: [TrackerCategory] = []
+    private var categories: [TrackerCategory] = []
     private var visibleCategories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
     private var trackerCategoryStore = TrackerCategoryStore()
@@ -36,11 +36,11 @@ final class TrackersViewController: UIViewController, UITextFieldDelegate {
         return datePicker
     }()
     
-    private lazy var addNewTrackerButton: UIButton = {
-        let addNewTrackerButton = UIButton()
-        addNewTrackerButton.backgroundColor = .white
-        addNewTrackerButton.setImage(UIImage(named: "AddNewTrackerButton"), for: .normal)
-        addNewTrackerButton.addTarget(self, action: #selector(tapAddNewTrackerButton), for: .touchUpInside)
+    private lazy var addNewTrackerButton: UIBarButtonItem = {
+        let addNewTrackerButton = UIBarButtonItem()
+        addNewTrackerButton.image = UIImage(named: "AddNewTrackerButton")
+        addNewTrackerButton.tintColor = .ypBlack
+        addNewTrackerButton.action = #selector(tapAddNewTrackerButton)
         return addNewTrackerButton
     }()
     
@@ -86,7 +86,7 @@ final class TrackersViewController: UIViewController, UITextFieldDelegate {
         super.init(coder: coder)
     }
     
-    // MARK: - TrackersViewController Lifecycle
+    // MARK: - TrackersViewControllerLifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -111,7 +111,9 @@ final class TrackersViewController: UIViewController, UITextFieldDelegate {
         view.addSubview(trackersCollection)
         view.addSubview(placeholderImage)
         view.addSubview(placeholderLabel)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: addNewTrackerButton)
+        addNewTrackerButton.target = self
+        navigationItem.leftBarButtonItem = addNewTrackerButton
+        navigationItem.leftBarButtonItem?.imageInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
         
         trackersCollection.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: "TrackerCollectionViewCell")
@@ -294,7 +296,7 @@ extension TrackersViewController: CreateTrackerViewControllerDelegate {
 
 extension TrackersViewController: TrackersCollectionViewCellDelegate {
     func trackerWasDone(id: UUID, indexPath: IndexPath) {
-        if datePicker.date > currentDate {
+        if currentDate > Date() {
             return
         }
         let trackerRecord = TrackerRecord(trackerRecordIdentifier: id, dateRecord: datePicker.date)

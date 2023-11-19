@@ -7,8 +7,8 @@
 
 import UIKit
 
-class CreateTrackerSupplementaryView: UICollectionReusableView {
-    var titleLabel: UILabel = {
+final class CreateTrackerSupplementaryView: UICollectionReusableView {
+    private var titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
         return label
@@ -29,5 +29,13 @@ class CreateTrackerSupplementaryView: UICollectionReusableView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func launchEmojiTitle() {
+        titleLabel.text = "Emoji"
+    }
+    
+    func launchColorTitle() {
+        titleLabel.text = "Цвет"
     }
 }

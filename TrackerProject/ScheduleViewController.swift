@@ -37,8 +37,8 @@ final class ScheduleViewController: UIViewController {
     private lazy var completeButton: UIButton = {
         let completeButton = UIButton()
         completeButton.setTitle("Готово", for: .normal)
-        completeButton.backgroundColor = UIColor(named: "Black")
-        completeButton.setTitleColor(.white, for: .normal)
+        completeButton.backgroundColor = .ypBlack
+        completeButton.setTitleColor(.ypWhite, for: .normal)
         completeButton.layer.cornerRadius = 16
         completeButton.addTarget(self, action: #selector(didTapCompleteButton), for: .touchUpInside)
         return completeButton
@@ -80,7 +80,7 @@ final class ScheduleViewController: UIViewController {
         let switcher = UISwitch(frame: .zero)
         let weekDay = WeekDay.allCases[indexPath.row]
         switcher.setOn(choosenWeekDays.contains(weekDay), animated: true)
-        switcher.onTintColor = UIColor(named: "Blue")
+        switcher.onTintColor = .ypBlue
         switcher.tag = indexPath.row
         switcher.addTarget(self, action: #selector(switcherChanged), for: .valueChanged)
         return switcher
@@ -112,7 +112,7 @@ extension ScheduleViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = weekDaysTableView.dequeueReusableCell(withIdentifier: "weekDayCell", for: indexPath)
         cell.textLabel?.text = weekDays[indexPath.row]
-        cell.backgroundColor = UIColor(named: "GrayHex")
+        cell.backgroundColor = .ypGrayHex
         cell.accessoryView = switcher(for: indexPath)
         return cell
     }

@@ -22,7 +22,7 @@ final class CreateTrackerViewController: UIViewController {
     ]
     private let colors: [UIColor] = (1...18).map { UIColor(named: "Color\($0)") ?? UIColor.clear }
     private var habbitName: String?
-    private var category: TrackerCategory?
+    private var categoryTitle: String?
     private var indexOfSelectedColor: IndexPath?
     private var indexOfSelectedEmoji: IndexPath?
     private var choosenSchedule: [WeekDay] = []
@@ -47,7 +47,7 @@ final class CreateTrackerViewController: UIViewController {
         textField.placeholder = "Введите название трекера"
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
         textField.leftViewMode = .always
-        textField.backgroundColor = UIColor(named: "GrayHex")
+        textField.backgroundColor = .ypGrayHex
         textField.layer.cornerRadius = 16
         textField.layer.borderWidth = 1.0
         textField.layer.borderColor = UIColor(named: "GrayHex")?.cgColor
@@ -58,7 +58,7 @@ final class CreateTrackerViewController: UIViewController {
     
     private lazy var limitationLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor(named: "Red")
+        label.textColor = .ypRed
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         label.text = "Ограничение 38 символов"
         return label
@@ -109,7 +109,7 @@ final class CreateTrackerViewController: UIViewController {
     private lazy var createButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 16
-        button.backgroundColor = UIColor(named: "Gray")
+        button.backgroundColor = .ypGray
         button.setTitle("Создать", for: .normal)
         button.clipsToBounds = true
         button.addTarget(self, action: #selector(createNewTracker), for: .touchUpInside)
@@ -175,6 +175,8 @@ final class CreateTrackerViewController: UIViewController {
         createButton.translatesAutoresizingMaskIntoConstraints = false
     }
     
+// MARK: - PrivateFunctions
+    
     private func updateButtonsTableView() {
         switch trackerType {
         case .habbit:
@@ -187,12 +189,12 @@ final class CreateTrackerViewController: UIViewController {
     }
     
     private func activateCreateButton() {
-        if textField.text != nil, category != nil, trackerType == .irregularEvent || trackerType == .habbit && !choosenSchedule.isEmpty, indexOfSelectedColor != nil, indexOfSelectedEmoji != nil {
+        if textField.text != nil, categoryTitle != nil, trackerType == .irregularEvent || trackerType == .habbit && !choosenSchedule.isEmpty, indexOfSelectedColor != nil, indexOfSelectedEmoji != nil {
             createButton.isEnabled = true
-            createButton.backgroundColor = UIColor(named: "Black")
+            createButton.backgroundColor = .ypBlack
         } else {
             createButton.isEnabled = false
-            createButton.backgroundColor = UIColor(named: "Gray")
+            createButton.backgroundColor = .ypGray
         }
     }
     
@@ -210,7 +212,7 @@ final class CreateTrackerViewController: UIViewController {
                                                  
     @objc private func createNewTracker() {
         let newTracker = Tracker(trackerIdentifier: UUID(), name: textField.text ?? "", color: colors[indexOfSelectedColor?.row ?? 0], emoji: emoji[indexOfSelectedEmoji?.row ?? 0], schedule: choosenSchedule)
-        let newCategory = TrackerCategory(title: category?.title ?? "", trackersList: [newTracker])
+        let newCategory = TrackerCategory(title: categoryTitle ?? "", trackersList: [newTracker])
         delegate?.reloadTrackersData(newCategory: newCategory, newTracker: newTracker)
         self.dismiss(animated: true, completion: nil)
         }
@@ -233,7 +235,7 @@ extension CreateTrackerViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CreateHabbitTableViewCell", for: indexPath)
-        cell.backgroundColor = UIColor(named: "GrayHex")
+        cell.backgroundColor = .ypGrayHex
         cell.selectionStyle = .none
         cell.accessoryType = .disclosureIndicator
         var choosenAttribute = NSMutableAttributedString()
@@ -242,7 +244,7 @@ extension CreateTrackerViewController: UITableViewDataSource {
         
         if indexPath.row == 0 {
             textLabel = "Категории"
-            if let categoryName = category?.title {
+            if let categoryName = categoryTitle {
                 textLabel += "\n" + categoryName }
             } else {
                 textLabel = "Расписание"
@@ -274,8 +276,9 @@ extension CreateTrackerViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
-            let controllerToPresent = CreateCategoryViewController()
-            controllerToPresent.delegate = self
+            let controllerToPresent = CategoryViewController()
+            controllerToPresent.categoryViewModel.delegate = self
+            controllerToPresent.categoryViewModel.selectCategory(category: categoryTitle)
             navigationController?.pushViewController(controllerToPresent, animated: true)
         } else {
             let controllerToPresent = ScheduleViewController()
@@ -320,9 +323,9 @@ extension CreateTrackerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! CreateTrackerSupplementaryView
         if indexPath.section == 0 {
-            view.titleLabel.text = "Emoji"
+            view.launchEmojiTitle()
         } else {
-            view.titleLabel.text = "Цвет"
+            view.launchColorTitle()
         }
         return view
     }
@@ -380,9 +383,9 @@ extension CreateTrackerViewController: UICollectionViewDelegateFlowLayout {
 
 // MARK: - CreateCategoryViewControllerDelegate
 
-extension CreateTrackerViewController: CreateCategoryViewControllerDelegate {
-    func updateNewCategory(newCategory: TrackerCategory?) {
-        self.category = newCategory
+extension CreateTrackerViewController: CategoryViewModelDelegate {
+    func updateCategory(newCategoryTitle: String?) {
+        categoryTitle = newCategoryTitle
         activateCreateButton()
         buttonsTableView.reloadData()
     }
