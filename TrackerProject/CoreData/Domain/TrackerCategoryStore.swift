@@ -18,9 +18,11 @@ enum TrackerCategoryStoreError: Error {
 
 final class TrackerCategoryStore: NSObject {
     
+    static let shared = TrackerCategoryStore()
+    
     weak var delegate: TrackerCategoryStoreDelegate?
     private let context: NSManagedObjectContext
-    private var trackerStore = TrackerStore()
+    private var trackerStore = TrackerStore.shared
     
     private lazy var fetchedResultsController: NSFetchedResultsController<TrackerCategoryCoreData> = {
         let fetchRequest = TrackerCategoryCoreData.fetchRequest()
@@ -63,7 +65,7 @@ final class TrackerCategoryStore: NSObject {
         guard let newTracker = newCategory.trackersList.first else { return }
         let tracker = try trackerStore.saveTracker(tracker: newTracker)
         
-        if let category = fetchedResultsController.fetchedObjects?.first(where: { $0.title == newCategory.title }) {
+        if let category = fetchedResultsController.fetchedObjects?.first(where: { $0.title == newCategory.title } ) {
             category.addToTrackers(tracker)
         } else {
             let category = TrackerCategoryCoreData(context: context)
@@ -77,6 +79,10 @@ final class TrackerCategoryStore: NSObject {
         let category = TrackerCategoryCoreData(context: context)
         category.title = categoryTitle
         try context.save()
+    }
+    
+    func categoryContainsTracker(trackerIdentifier: UUID?) throws -> String {
+        trackerCategories.first(where: { $0.trackersList.contains(where: { $0.trackerIdentifier == trackerIdentifier } ) } )?.title ?? ""
     }
 }
 

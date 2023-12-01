@@ -1,0 +1,37 @@
+/* 
+  Localizable.strings
+  TrackerProject
+
+  Created by Артём Костянко on 2.12.23.
+  
+*/
+
+trackersTitle = "Трекеры";
+filterButton = "Фильтры";
+statistics = "Статистика";
+oneDay = "день";
+day = "дня";
+days = "дней";
+mainPlaceholderTextOne = "Что будем отслеживать?";
+mainPlaceholderTextTwo = "Ничего не найдено";
+searchPlaceholder = "Поиск";
+edit = "Редактировать";
+attach = "Закрепить";
+unattach = "Открепить";
+delete = "Удалить";
+deleteWarning = "Уверены, что хотите удалить трекер?";
+cancel = "Отменить";
+monday = "Понедельник";
+tuesday = "Вторник";
+wednesday = "Среда";
+thursday = "Четверг";
+friday = "Пятница";
+saturday = "Суббота";
+sunday = "Воскресенье";
+mondayShort = "Пн";
+tuesdayShort = "Вт";
+wednesdayShort = "Ср";
+thursdayShort = "Чт";
+fridayShort = "Пт";
+saturdayShort = "Сб";
+sundayShort = "Вс";

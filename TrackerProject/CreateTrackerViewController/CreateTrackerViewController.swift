@@ -121,11 +121,6 @@ final class CreateTrackerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
-        buttonsTableView.register(UITableViewCell.self, forCellReuseIdentifier: "CreateHabbitTableViewCell")
-        collectionView.register(EmojiCollectionViewCell.self, forCellWithReuseIdentifier: "EmojiCollectionViewCell")
-        collectionView.register(ColorsCollectionViewCell.self, forCellWithReuseIdentifier: "ColorsCollectionViewCell")
-        collectionView.register(CreateTrackerSupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         setupViews()
         updateButtonsTableView()
         hideKeyboard()
@@ -134,6 +129,11 @@ final class CreateTrackerViewController: UIViewController {
     // MARK: - SetupViews
     
     private func setupViews() {
+        view.backgroundColor = .white
+        buttonsTableView.register(UITableViewCell.self, forCellReuseIdentifier: "CreateHabbitTableViewCell")
+        collectionView.register(EmojiCollectionViewCell.self, forCellWithReuseIdentifier: "EmojiCollectionViewCell")
+        collectionView.register(ColorsCollectionViewCell.self, forCellWithReuseIdentifier: "ColorsCollectionViewCell")
+        collectionView.register(CreateTrackerSupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         navigationItem.setHidesBackButton(true, animated: true)
         view.addSubview(scrollView)
         scrollView.addSubview(textField)
@@ -143,7 +143,6 @@ final class CreateTrackerViewController: UIViewController {
         scrollView.addSubview(buttonsStack)
         buttonsStack.addArrangedSubview(cancelButton)
         buttonsStack.addArrangedSubview(createButton)
-        
         
         NSLayoutConstraint.activate([
             textField.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 24),
@@ -211,7 +210,7 @@ final class CreateTrackerViewController: UIViewController {
     }
                                                  
     @objc private func createNewTracker() {
-        let newTracker = Tracker(trackerIdentifier: UUID(), name: textField.text ?? "", color: colors[indexOfSelectedColor?.row ?? 0], emoji: emoji[indexOfSelectedEmoji?.row ?? 0], schedule: choosenSchedule)
+        let newTracker = Tracker(trackerIdentifier: UUID(), name: textField.text ?? "", color: colors[indexOfSelectedColor?.row ?? 0], emoji: emoji[indexOfSelectedEmoji?.row ?? 0], schedule: choosenSchedule, wasAttached: false)
         let newCategory = TrackerCategory(title: categoryTitle ?? "", trackersList: [newTracker])
         delegate?.reloadTrackersData(newCategory: newCategory, newTracker: newTracker)
         self.dismiss(animated: true, completion: nil)

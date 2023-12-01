@@ -14,8 +14,12 @@ final class TrackersViewController: UIViewController, UITextFieldDelegate {
     private var categories: [TrackerCategory] = []
     private var visibleCategories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
-    private var trackerCategoryStore = TrackerCategoryStore()
-    private var trackerRecordStore = TrackerRecordStore()
+    private var attachedTrackers: [Tracker] = []
+    private var trackerCategoryStore = TrackerCategoryStore.shared
+    private var trackerRecordStore = TrackerRecordStore.shared
+    private var trackerStore = TrackerStore.shared
+    private var analyticsService = AnalyticsService.shared
+    private var selectedFilter = Filter.allTrackers
     
     private var currentDate: Date {
         let currentDate = datePicker.date
@@ -28,7 +32,8 @@ final class TrackersViewController: UIViewController, UITextFieldDelegate {
         let datePicker = UIDatePicker()
         datePicker.backgroundColor = UIColor(named: "DatePickerBackground")
         datePicker.locale = Locale(identifier: "ru")
-        datePicker.layer.cornerRadius = 8
+        datePicker.layer.cornerRadius = 16
+        datePicker.tintColor = .ypBlack
         datePicker.calendar.firstWeekday = 2
         datePicker.preferredDatePickerStyle = .compact
         datePicker.datePickerMode = .date
@@ -46,14 +51,14 @@ final class TrackersViewController: UIViewController, UITextFieldDelegate {
     
     private lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.text = "Трекеры"
+        titleLabel.text = NSLocalizedString("trackersTitle", comment: "Text displayed on empty state")
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .bold)
         return titleLabel
     }()
     
     private lazy var searchTextField: UISearchTextField = {
         let searchTextField = UISearchTextField()
-        searchTextField.placeholder = "Поиск"
+        searchTextField.placeholder = NSLocalizedString("searchPlaceholder", comment: "Text displayed on empty state")
         searchTextField.delegate = self
         searchTextField.addTarget(self, action: #selector(updateVisibleCategories), for: .allEditingEvents)
         return searchTextField
@@ -73,9 +78,20 @@ final class TrackersViewController: UIViewController, UITextFieldDelegate {
     
     private lazy var placeholderLabel: UILabel = {
         let placeholderLabel = UILabel()
-        placeholderLabel.text = "Что будем отслеживать?"
+        placeholderLabel.text = NSLocalizedString("mainPlaceholderTextOne", comment: "Text displayed on empty state")
         placeholderLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         return placeholderLabel
+    }()
+    
+    private lazy var filterButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .ypBlue
+        button.setTitleColor(.ypWhite, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        button.setTitle(NSLocalizedString("filterButton", comment: "Text displayed on empty state"), for: .normal)
+        button.layer.cornerRadius = 16
+        button.addTarget(self, action: #selector(tapFilterButton), for: .touchUpInside)
+        return button
     }()
     
     init() {
@@ -92,25 +108,33 @@ final class TrackersViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         setupViews()
-        
         trackerCategoryStore.delegate = self
-        categories = trackerCategoryStore.trackerCategories
         trackerRecordStore.delegate = self
-        completedTrackers = trackerRecordStore.completedTrackers
-        
-        visibleCategories = categories
         updateVisibleCategories()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        analyticsService.reportEvent(event: "open", params: ["screen":"Main"])
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        analyticsService.reportEvent(event: "close", params: ["screen":"Main"])
     }
     
     // MARK: - ViewsSetup
     
     private func setupViews() {
-        view.backgroundColor = .white
+        view.backgroundColor = .ypWhite
         view.addSubview(titleLabel)
         view.addSubview(searchTextField)
         view.addSubview(trackersCollection)
         view.addSubview(placeholderImage)
         view.addSubview(placeholderLabel)
+        view.addSubview(filterButton)
         addNewTrackerButton.target = self
         navigationItem.leftBarButtonItem = addNewTrackerButton
         navigationItem.leftBarButtonItem?.imageInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
@@ -139,12 +163,17 @@ final class TrackersViewController: UIViewController, UITextFieldDelegate {
             placeholderImage.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
             placeholderLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             placeholderLabel.topAnchor.constraint(equalTo: placeholderImage.bottomAnchor, constant: 8),
+            filterButton.heightAnchor.constraint(equalToConstant: 50),
+            filterButton.widthAnchor.constraint(equalToConstant: 114),
+            filterButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            filterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
         ])
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         searchTextField.translatesAutoresizingMaskIntoConstraints = false
         trackersCollection.translatesAutoresizingMaskIntoConstraints = false
         placeholderImage.translatesAutoresizingMaskIntoConstraints = false
         placeholderLabel.translatesAutoresizingMaskIntoConstraints = false
+        filterButton.translatesAutoresizingMaskIntoConstraints = false
         
         trackersCollection.dataSource = self
         trackersCollection.delegate = self
@@ -168,6 +197,21 @@ final class TrackersViewController: UIViewController, UITextFieldDelegate {
 // MARK: - ObjcFunctions
     
     @objc private func updateVisibleCategories() {
+        categories = trackerCategoryStore.trackerCategories
+        completedTrackers = trackerRecordStore.completedTrackers
+        attachedTrackers = categories.flatMap( { $0.trackersList.filter( { $0.wasAttached } ) } )
+        
+        if !attachedTrackers.isEmpty {
+            categories = categories.compactMap { category in
+                let trackersList = category.trackersList.filter { !$0.wasAttached }
+                if trackersList.isEmpty {
+                    return nil
+                }
+                return TrackerCategory(title: category.title, trackersList: trackersList)
+            }
+            categories.insert(TrackerCategory(title: "Закрепленные", trackersList: attachedTrackers), at: 0)
+        }
+        
         let calendar = Calendar.current
         let dateFilter = calendar.component(.weekday, from: datePicker.date)
         let nameFilter = (searchTextField.text ?? "").lowercased()
@@ -178,7 +222,15 @@ final class TrackersViewController: UIViewController, UITextFieldDelegate {
                let date = tracker.schedule.contains { weekDay in
                    weekDay.numbersWeekDay == dateFilter
                } == true || tracker.schedule.isEmpty
-               return name && date
+               
+               switch selectedFilter {
+               case .allTrackers, .trackersForToday:
+                   return name && date
+               case .completedTrackers:
+                   return name && date && trackerIsRecorded(id: tracker.trackerIdentifier)
+               case .incompletedTrackers:
+                   return name && date && !trackerIsRecorded(id: tracker.trackerIdentifier)
+               }
            }
            if trackers.isEmpty {
                return nil
@@ -186,10 +238,10 @@ final class TrackersViewController: UIViewController, UITextFieldDelegate {
            return TrackerCategory(title: category.title, trackersList: trackers)
        }
         if categories.isEmpty {
-            showPlaceholder(text: "Что будем отслеживать?", image: UIImage(named: "TrackersViewImage") ?? UIImage(), isHidden: false)
+            showPlaceholder(text: NSLocalizedString("mainPlaceholderTextOne", comment: "Text displayed on empty state"), image: UIImage(named: "TrackersViewImage") ?? UIImage(), isHidden: false)
         } else
         if visibleCategories.isEmpty {
-            showPlaceholder(text: "Ничего не найдено", image: UIImage(named: "NotFoundTrackerPlaceholder") ?? UIImage(), isHidden: false)
+            showPlaceholder(text: NSLocalizedString("mainPlaceholderTextTwo", comment: "Text displayed on empty state"), image: UIImage(named: "NotFoundTrackerPlaceholder") ?? UIImage(), isHidden: false)
         } else {
             showPlaceholder(text: "", image: UIImage(), isHidden: true)
         }
@@ -201,6 +253,16 @@ final class TrackersViewController: UIViewController, UITextFieldDelegate {
         let createController = ChooseTrackerTypeViewController()
         createController.delegate = self
         let navigationController = UINavigationController(rootViewController: createController)
+        analyticsService.reportEvent(event: "click", params: ["screen":"Main", "item":"add_track"])
+        present(navigationController, animated: true)
+    }
+                         
+    @objc private func tapFilterButton() {
+        let filterViewController = FilterViewController()
+        filterViewController.delegate = self
+        filterViewController.selectedFilter = selectedFilter
+        let navigationController = UINavigationController(rootViewController: filterViewController)
+        analyticsService.reportEvent(event: "click", params: ["screen":"Main", "item":"filter"])
         present(navigationController, animated: true)
     }
 }
@@ -309,8 +371,78 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
         try? trackerRecordStore.removeTrackerRecord(trackerRecord: trackerRecord)
         trackersCollection.reloadItems(at: [indexPath])
     }
+    
+    func openContextMenu(id: UUID?, indexPath: IndexPath) -> UIContextMenuConfiguration? {
+        let attachedTracker = categories.contains(where: { category in
+            category.trackersList.contains(where: { $0.trackerIdentifier == id && $0.wasAttached } )
+        })
+        
+        let attachTracker = UIAction(title: attachedTracker ? NSLocalizedString("unattach", comment: "Text displayed on empty state") : NSLocalizedString("attach", comment: "Text displayed on empty state")) { [weak self] _ in
+            try? self?.trackerStore.trackerWasAttached(trackerIdentifier: id, wasAttached: !attachedTracker)
+            self?.updateVisibleCategories()
+        }
+        
+        let editTracker = UIAction(title: NSLocalizedString("edit", comment: "Text displayed on empty state")) { [weak self] _ in
+            self?.analyticsService.reportEvent(event: "click", params: ["screen":"Main", "item":"edit"])
+            let categoryTitle = try? self?.trackerCategoryStore.categoryContainsTracker(trackerIdentifier: id)
+            let editedTracker = try? self?.trackerStore.getTrackerByIdentifier(trackerIdentifier: id)
+            
+            guard let editedTracker,
+                  let categoryTitle else { return }
+            
+            let editViewController = editedTracker.schedule.isEmpty ? EditTrackerViewController(trackerType: .irregularEvent, categoryName: categoryTitle, tracker: editedTracker) : EditTrackerViewController(trackerType: .habbit, categoryName: categoryTitle, tracker: editedTracker)
+            editViewController.numberOfTrackerExecutions = (try? self?.trackerRecordStore.comletedTrackerRecordById(trackerIdentifier: editedTracker.trackerIdentifier)) ?? 0
+            editViewController.delegate = self
+            
+            let navigationController = UINavigationController(rootViewController: editViewController)
+            self?.present(navigationController, animated: true)
+        }
+        
+        let deleteTracker = UIAction(title: NSLocalizedString("delete", comment: "Text displayed on empty state"), attributes: .destructive) { [weak self] _ in
+            self?.analyticsService.reportEvent(event: "click", params: ["screen":"Main", "item":"delete"])
+            let alert = UIAlertController(
+                title: "",
+                message: NSLocalizedString("deleteWarning", comment: "Text displayed on empty state"),
+                preferredStyle: .actionSheet)
+            
+            alert.addAction(UIAlertAction(title: NSLocalizedString("delete", comment: "Text displayed on empty state"),
+                                          style: .destructive) { [self] _ in
+                try? self?.trackerStore.deleteTracker(trackerIdentifier: id)
+                try? self?.trackerRecordStore.removeTrackerRecordById(trackerIdentifier: id)
+                
+                let newVisibleCategories = self?.visibleCategories.map { category in
+                    let trackers = category.trackersList.filter { $0.trackerIdentifier != id }
+                    return TrackerCategory(title: category.title, trackersList: trackers)
+                }
+                
+                self?.visibleCategories = newVisibleCategories.map { category in
+                    category.filter { !$0.trackersList.isEmpty }
+                } ?? []
+                
+                self?.trackersCollection.performBatchUpdates ( {
+                    if self?.trackersCollection.numberOfItems(inSection: indexPath.section) == 1 {
+                        self?.trackersCollection.deleteSections(NSIndexSet(index: indexPath.section) as IndexSet)
+                    } else {
+                        self?.trackersCollection.deleteItems(at: [indexPath])
+                    }
+                }) { _ in
+                    self?.trackersCollection.reloadItems(at: (self?.trackersCollection.indexPathsForVisibleItems)!)
+                    self?.updateVisibleCategories()
+                }
+            })
+            
+            alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: "Text displayed on empty state"),
+                                          style: .cancel))
+            self?.present(alert, animated: true)
+            return
+        }
+        return UIContextMenuConfiguration(actionProvider: { _ in
+            UIMenu(children: [attachTracker, editTracker, deleteTracker])
+        })
+    }
 }
-
+                            
+                            
 // MARK: - TrackerCategoryStoreDelegate
 
 extension TrackersViewController: TrackerCategoryStoreDelegate {
@@ -319,7 +451,7 @@ extension TrackersViewController: TrackerCategoryStoreDelegate {
     }
 }
 
-// MARK: = TrackerRecordStoreDelegate
+// MARK: - TrackerRecordStoreDelegate
 
 extension TrackersViewController: TrackerRecordStoreDelegate {
     func updateTrackerRecords() {
@@ -327,3 +459,14 @@ extension TrackersViewController: TrackerRecordStoreDelegate {
     }
 }
 
+// MARK: - FilterViewControllerDelegate
+
+extension TrackersViewController: FilterViewControllerDelegate {
+    func selectedFilters(filter: Filter) {
+        selectedFilter = filter
+        if filter == .trackersForToday {
+            datePicker.date = Date()
+        }
+        updateVisibleCategories()
+    }
+}

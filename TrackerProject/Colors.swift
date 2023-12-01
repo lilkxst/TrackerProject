@@ -15,4 +15,5 @@ extension UIColor {
     static let ypGrayHex = UIColor(named: "GrayHex")
     static let ypBlue = UIColor(named: "Blue")
     static let ypRed = UIColor(named: "Red")
+    static let gradient: [UIColor] = (1...3).map { UIColor(named: "Gradient\($0)") ?? .black}
 }
