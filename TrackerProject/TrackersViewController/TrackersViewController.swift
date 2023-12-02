@@ -33,7 +33,8 @@ final class TrackersViewController: UIViewController, UITextFieldDelegate {
         datePicker.backgroundColor = UIColor(named: "DatePickerBackground")
         datePicker.locale = Locale(identifier: "ru")
         datePicker.layer.cornerRadius = 16
-        datePicker.tintColor = .ypBlack
+        datePicker.tintColor = UIColor(named: "DatePickerTextColor")
+        datePicker.overrideUserInterfaceStyle = .light
         datePicker.calendar.firstWeekday = 2
         datePicker.preferredDatePickerStyle = .compact
         datePicker.datePickerMode = .date
