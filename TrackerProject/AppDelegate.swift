@@ -21,8 +21,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return container
     }()
     
+    private let analyticsService = AnalyticsService.shared
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-       
+        analyticsService.activateYandexMetrica()
         return true
     }
 
